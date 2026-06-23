@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TACO FIESTA - Premium</title>
+    <style>
+        /* --- GLOBAL STYLES --- */
+        :root {
+            --text-color: #ffffff;
+            --nav-bg: #ffffff;
+            --nav-text: #000000;
+            --placeholder-bg: #d9d9d9;
+            --accent-color: #ff9800; /* Nice orange accent for the taco theme */
+        }
+
+        body {
+            /* Upgraded from flat blue to a rich gradient for depth */
+            background: linear-gradient(135deg, #13132b 0%, #1b1b3a 100%);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem 5%;
+            min-height: 100vh;
+        }
+
+        h1.business-name {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        nav {
+            background-color: var(--nav-bg);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Added deeper shadow */
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--nav-text);
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            border-radius: 25px;
+        }
+
+        nav button:hover, nav button.active {
+            background-color: #f0f0f0;
+            color: var(--accent-color);
+        }
+
+        /* --- SECTION CONTROLS --- */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- LAYOUT GRIDS --- */
+        .split-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4rem; /* Increased gap to fill space better */
+            flex-wrap: wrap;
+        }
+
+        .left-col { flex: 1; min-width: 300px; }
+        .right-col { flex: 1; display: flex; justify-content: center; min-width: 300px; }
+
+        /* --- BUTTONS --- */
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6);
+        }
+
+        /* --- HOMEPAGE SPECIFIC --- */
+        .hero-text {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero-subtext {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .about-text {
+            text-align: center;
+            margin-top: 5rem;
+            font-size: 1.3rem;
+            font-style: italic;
+            opacity: 0.8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- PICTURE SLIDER (FADE IMPLEMENTED) --- */
+        .carousel-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .arrow-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .arrow-btn:hover { background: rgba(255,255,255,0.3); }
+        
+        .image-box {
+            background-color: var(--placeholder-bg);
+            width: 350px;
+            height: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); /* Glow/Shadow to fill space */
+        }
+        
+        #slider-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* THIS IS THE CSS MAGIC FOR THE FADE */
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        .dot.active { opacity: 1; }
+
+        /* --- SERVICES (Menu) SPECIFIC --- */
+        .service-item { 
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 1.5rem; 
+            border-left: 4px solid var(--accent-color);
+        }
+        .service-item h3 { margin: 0 0 8px 0; font-size: 1.4rem; }
+        .service-item p { margin: 0; opacity: 0.8; line-height: 1.4;}
+
+        /* --- CONTACT SPECIFIC --- */
+        .contact-list { list-style: none; padding: 0; font-size: 1.3rem; }
+        .contact-list li { 
+            margin-bottom: 2rem; 
+            background: rgba(255,255,255,0.05); 
+            padding: 20px; 
+            border-radius: 10px;
+        }
+        .contact-list a { color: var(--accent-color); text-decoration: none; font-weight: bold;}
+        .contact-list a:hover { text-decoration: underline; }
+
+        /* --- REVIEWS SPECIFIC --- */
+        .reviews-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .review-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 280px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .review-card h4 { margin-top: 0; color: var(--accent-color);}
+        
+        .animated-bar {
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            text-align: center;
+            margin-top: 4rem;
+            border-radius: 15px;
+            font-size: 1.4rem;
+        }
+        .word-cycler { color: var(--accent-color); font-weight: bold; transition: opacity 0.5s; }
+    </style>
+</head>
+<body>
+
+    <h1 class="business-name">🌮 Taco Fiesta</h1>
+
+    <nav>
+        <button onclick="switchTab('home')" id="btn-home" class="active">Homepage</button>
+        <button onclick="switchTab('services')" id="btn-services">Menu</button>
+        <button onclick="switchTab('contact')" id="btn-contact">Contact</button>
+        <button onclick="switchTab('reviews')" id="btn-reviews">Reviews</button>
+    </nav>
+
+    <section id="home" class="page-section active">
+        <div class="split-layout">
+            <div class="left-col">
+                <div class="hero-text">TOP Mexican Restaurant in Plano</div>
+                <div class="hero-subtext">Experience authentic street tacos made from fresh, locally sourced ingredients. Stop by today to taste the tradition.</div>
+                <button class="btn-primary" onclick="switchTab('services')">View Our Menu</button>
+            </div>
+            
+            <div class="right-col">
+                <div class="carousel-container">
+                    <button class="arrow-btn" onclick="prevImage()">←</button>
+                    <div>
+                        <div class="image-box">
+                            <img id="slider-img" src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tacos">
+                        </div>
+                        <div class="dots">
+                            <div class="dot active" id="dot-0"></div>
+                            <div class="dot" id="dot-1"></div>
+                            <div class="dot" id="dot-2"></div>
+                        </div>
+                    </div>
+                    <button class="arrow-btn" onclick="nextImage()">→</button>
+                </div>
+            </div>
+        </div>
+        <p class="about-text">"Family-owned and operated since 1998. We bring the heart of Mexico straight to your plate."</p>
+    </section>
+
+    <section id="services" class="page-section">
+        <div class="split-layout">
+            <div class="left-col">
+                <div class="service-item">
+                    <h3>Carne Asada Tacos ($3.50)</h3>
+                    <p>Premium grilled steak, fresh cilantro, diced onions, and homemade salsa.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Al Pastor Tacos ($3.00)</h3>
+                    <p>Traditional marinated pork topped with sweet pineapple.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Cinnamon Churros ($4.50)</h3>
+                    <p>Crispy golden fried dough dusted with cinnamon sugar.</p>
+                </div>
+            </div>
+            
+            <div class="right-col">
+                <div class="image-box">
+                    <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Menu Item" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="page-section">
+        <div class="split-layout">
+            <div class="left-col">
+                <ul class="contact-list">
+                    <li>📧 <span>Email us at: <br><a href="mailto:hello@tacofiesta.fake">hello@tacofiesta.fake</a></span></li>
+                    <li>📞 <span>Call to order: <br><a href="tel:5551234567">(555) 123-4567</a></span></li>
+                    <li>🏢 <span>Visit us: <br><a href="https://maps.google.com" target="_blank">123 Fake Street, Plano, TX</a></span></li>
+                </ul>
+            </div>
+            <div class="right-col">
+                <div class="image-box" style="border-radius: 15px;">
+                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Map Location" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="page-section">
+        <div class="reviews-grid">
+            <div class="review-card">
+                <h4>John D.</h4>
+                <p>⭐⭐⭐⭐⭐</p>
+                <p>"Honestly, these tacos are absolutely delicious! Best in Texas."</p>
+            </div>
+            <div class="review-card">
+                <h4>Maria S.</h4>
+                <p>⭐⭐⭐⭐⭐</p>
+                <p>"The Al Pastor is perfectly seasoned. Tastes just like home."</p>
+            </div>
+            <div class="review-card">
+                <h4>David L.</h4>
+                <p>⭐⭐⭐⭐⭐</p>
+                <p>"Fast service and amazing food. Will definitely be coming back for more!"</p>
+            </div>
+        </div>
+
+        <div class="animated-bar">
+            What our customers say: 
+            "<span class="word-cycler" id="cycle-text">Absolutely delicious!</span>"
+        </div>
+    </section>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        const images = [
+            "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1504544750208-dc0358e63f7f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ];
+        let currentImgIndex = 0;
+        const sliderImg = document.getElementById('slider-img');
+
+        function updateSlider() {
+            // 1. Fade Out
+            sliderImg.style.opacity = 0;
+            
+            // 2. Wait for fade out, swap image, then Fade In
+            setTimeout(() => {
+                sliderImg.src = images[currentImgIndex];
+                sliderImg.style.opacity = 1;
+            }, 400); // 400ms matches the CSS transition time
+
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentImgIndex);
+            });
+        }
+
+        function nextImage() {
+            currentImgIndex = (currentImgIndex + 1) % images.length;
+            updateSlider();
+        }
+
+        function prevImage() {
+            currentImgIndex = (currentImgIndex - 1 + images.length) % images.length;
+            updateSlider();
+        }
+
+        const cycleWords = [
+            "Absolutely delicious!", 
+            "The best in Plano!", 
+            "Highly recommended!", 
+            "Perfectly seasoned!"
+        ];
+        let wordIndex = 0;
+        const cycleTextElement = document.getElementById('cycle-text');
+
+        setInterval(() => {
+            cycleTextElement.style.opacity = 0; 
+            setTimeout(() => {
+                wordIndex = (wordIndex + 1) % cycleWords.length;
+                cycleTextElement.innerText = cycleWords[wordIndex];
+                cycleTextElement.style.opacity = 1; 
+            }, 500); 
+        }, 3000); 
+
+    </script>
+</body>
+</html>
